@@ -48,6 +48,20 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- AWS -->
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-starter-aws-secrets-manager-config</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.24.9</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
