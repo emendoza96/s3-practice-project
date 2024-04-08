@@ -26,10 +26,7 @@ public class ProductService {
     public void saveProductWithImage(Product product, MultipartFile imageFile) {
 
         if (imageFile != null) {
-
-            String fileNameOriginal = imageFile.getOriginalFilename();
-            String extension = fileNameOriginal.substring(fileNameOriginal.lastIndexOf(".") + 1);
-            String fileName = String.format("product-%s-%s.%s", product.getCode(), LocalDate.now().toString(), extension);
+            String fileName = String.format("product-%s-%s.jpg", product.getCode(), LocalDate.now().toString());
 
             try {
                 awsS3Client.uploadFile(imageFile, fileName);

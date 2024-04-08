@@ -15,6 +15,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.s3practice.product.service.ImageProcessingService;
 
 @Component
 public class AwsClient {
@@ -23,6 +24,9 @@ public class AwsClient {
 
     @Autowired
     private AmazonS3 awsS3Client;
+
+    @Autowired
+    private ImageProcessingService imageProcessingService;
 
     @Value("${aws.bucket-name}")
     private String bucketName;
@@ -46,18 +50,11 @@ public class AwsClient {
 
     public PutObjectResult uploadFile(MultipartFile multipartFile, String fileName) throws IOException {
 
-        File file = convertMultiPartFileToFile(multipartFile);
+        File file = imageProcessingService.resizeImage(multipartFile);
 
         PutObjectRequest request = new PutObjectRequest(bucketName, fileName, file);
 
         return awsS3Client.putObject(request);
     }
 
-
-    private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
-        // Create a temporal file into the current directory
-        File convertedFile = File.createTempFile("temp-file", null);
-        file.transferTo(convertedFile);
-        return convertedFile;
-    }
 }
