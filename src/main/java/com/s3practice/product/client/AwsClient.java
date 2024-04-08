@@ -55,7 +55,8 @@ public class AwsClient {
 
 
     private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
-        File convertedFile = new File(file.getOriginalFilename());
+        // Create a temporal file into the current directory
+        File convertedFile = File.createTempFile("temp-file", null);
         file.transferTo(convertedFile);
         return convertedFile;
     }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCommerce</title>
+</head>
+<body>
+    <div class="container">
+        <h3>Add Product</h3>
+
+        <form action="/api/product" method="post" enctype="multipart/form-data">
+            <label for="nameInput">Name: </label>
+            <input id="nameInput" name="name" type="text" placeholder="Banana">
+
+            <label for="codeInput">Code: </label>
+            <input id="codeInput" name="code" type="text" placeholder="XXX000XXX">
+
+            <label for="imageInput">Image: </label>
+            <input type="file" name="imageFile" id="imageInput" accept="image/*">
+
+            <button type="submit">Send</button>
+        </form>
+
+        <div>
+            <a href="/list-products">List</a>
+        </div>
+    </div>
+</body>
+</html>

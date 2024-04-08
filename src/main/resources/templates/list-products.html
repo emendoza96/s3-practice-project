@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCommerce</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Product List</h2>
+        <a href="/">Add</a>
+
+        <div id="productDiv"></div>
+    </div>
+</body>
+
+<script>
+    let storageUrl = "https://emendoza96-datalake0000.s3.us-east-2.amazonaws.com/";
+
+    function getProducts() {
+        let products = [];
+
+        fetch("/api/product")
+            .then(response => {
+                if(!response.ok) {
+                    throw new Error('Error trying to get the products');
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+
+                let productDiv = document.getElementById("productDiv");
+
+                for(product of data) {
+                    console.log(product);
+
+                    productDiv.innerHTML += `
+                        <div>
+                            <p>Name: ${product.name}</p>
+                            <p>Code: ${product.code}</p>
+                            <img src="${storageUrl}${product.image}" alt="test" width="200" height="200">
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error)
+            })
+        ;
+    }
+
+    getProducts();
+</script>
+
+</html>

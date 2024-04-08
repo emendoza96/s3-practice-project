@@ -1,6 +1,8 @@
 package com.s3practice.product.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,8 @@ import com.s3practice.product.model.Product;
 import com.s3practice.product.service.ProductService;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 
@@ -45,12 +49,24 @@ public class ProductController {
             .currentStock(currentStock)
             .build()
         ;
-
+        System.out.println(imageFile.getOriginalFilename());
         try {
             productService.saveProductWithImage(product, imageFile);
             return ResponseEntity.ok("Product saved successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllProducts() {
+
+        try {
+            List<Product> products = productService.getAll();
+            return ResponseEntity.ok().body(products);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
 
     }

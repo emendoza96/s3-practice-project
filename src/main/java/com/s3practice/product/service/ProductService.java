@@ -2,6 +2,7 @@ package com.s3practice.product.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,19 +25,28 @@ public class ProductService {
     @Transactional // We need to do a rollback if we can not save the image in s3
     public void saveProductWithImage(Product product, MultipartFile imageFile) {
 
-        String fileNameOriginal = imageFile.getOriginalFilename();
-        String extension = fileNameOriginal.substring(fileNameOriginal.lastIndexOf(".") + 1);
-        String fileName = String.format("product-%s-%s.%s", product.getCode(), LocalDate.now().toString(), extension);
+        if (imageFile != null) {
 
-        try {
+            String fileNameOriginal = imageFile.getOriginalFilename();
+            String extension = fileNameOriginal.substring(fileNameOriginal.lastIndexOf(".") + 1);
+            String fileName = String.format("product-%s-%s.%s", product.getCode(), LocalDate.now().toString(), extension);
 
-            awsS3Client.uploadFile(imageFile, fileName);
-        } catch (IOException e) {
-            throw new RuntimeException("Error to save the image in S3", e);
+            try {
+                awsS3Client.uploadFile(imageFile, fileName);
+            } catch (IOException e) {
+                throw new RuntimeException("Error to save the image in S3", e);
+            }
+
+            product.setImage(fileName);
+
         }
-
-        product.setImage(fileName);
 
         productRepository.save(product);
     }
+
+    public List<Product> getAll() {
+        return productRepository.findAll();
+    }
+
+
 }
