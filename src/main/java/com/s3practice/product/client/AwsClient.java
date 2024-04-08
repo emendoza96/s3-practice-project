@@ -44,11 +44,11 @@ public class AwsClient {
 
     }
 
-    public PutObjectResult uploadFile(MultipartFile multipartFile) throws IOException {
+    public PutObjectResult uploadFile(MultipartFile multipartFile, String fileName) throws IOException {
 
         File file = convertMultiPartFileToFile(multipartFile);
 
-        PutObjectRequest request = new PutObjectRequest(bucketName, file.getName(), file);
+        PutObjectRequest request = new PutObjectRequest(bucketName, fileName, file);
 
         return awsS3Client.putObject(request);
     }
