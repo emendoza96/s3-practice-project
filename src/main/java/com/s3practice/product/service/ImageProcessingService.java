@@ -1,5 +1,6 @@
 package com.s3practice.product.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,19 +12,19 @@ import net.coobird.thumbnailator.Thumbnails;
 @Service
 public class ImageProcessingService {
 
-    public File resizeImage(MultipartFile multipartFile) throws IOException {
+    public byte[] resizeImage(MultipartFile multipartFile) throws IOException {
 
         File image = convertMultiPartFileToFile(multipartFile);
-        File output = new File("output.jpg");
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         Thumbnails.of(image)
             .scale(1)
             .outputQuality(0.5)
             .outputFormat("jpg")
-            .toFile(output)
+            .toOutputStream(outputStream);
         ;
 
-        return output;
+        return outputStream.toByteArray();
     }
 
     private File convertMultiPartFileToFile(MultipartFile file) throws IOException {

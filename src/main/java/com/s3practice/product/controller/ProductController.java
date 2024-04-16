@@ -49,7 +49,7 @@ public class ProductController {
             .currentStock(currentStock)
             .build()
         ;
-        System.out.println(imageFile.getOriginalFilename());
+
         try {
             productService.saveProductWithImage(product, imageFile);
             return ResponseEntity.ok("Product saved successfully");

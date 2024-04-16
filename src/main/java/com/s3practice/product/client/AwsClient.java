@@ -1,7 +1,8 @@
 package com.s3practice.product.client;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 
 import com.amazonaws.services.s3.model.CreateBucketRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.s3practice.product.service.ImageProcessingService;
@@ -50,9 +52,13 @@ public class AwsClient {
 
     public PutObjectResult uploadFile(MultipartFile multipartFile, String fileName) throws IOException {
 
-        File file = imageProcessingService.resizeImage(multipartFile);
+        byte[] resizedImageBytes = imageProcessingService.resizeImage(multipartFile);
 
-        PutObjectRequest request = new PutObjectRequest(bucketName, fileName, file);
+        InputStream inputStream = new ByteArrayInputStream(resizedImageBytes);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(resizedImageBytes.length);
+
+        PutObjectRequest request = new PutObjectRequest(bucketName, fileName, inputStream, metadata);
 
         return awsS3Client.putObject(request);
     }
