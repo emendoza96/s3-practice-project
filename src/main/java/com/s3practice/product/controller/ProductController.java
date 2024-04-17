@@ -16,6 +16,7 @@ import com.s3practice.product.model.Product;
 import com.s3practice.product.service.ProductService;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/product")
 public class ProductController {
 
@@ -30,7 +32,7 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity<String> saveProduct(
+    public ResponseEntity<?> saveProduct(
         @RequestParam(required = false) String code,
         @RequestParam(required = false) String name,
         @RequestParam(required = false) String description,
@@ -51,8 +53,8 @@ public class ProductController {
         ;
 
         try {
-            productService.saveProductWithImage(product, imageFile);
-            return ResponseEntity.ok("Product saved successfully");
+            Product newProduct = productService.saveProductWithImage(product, imageFile);
+            return ResponseEntity.ok(newProduct);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }

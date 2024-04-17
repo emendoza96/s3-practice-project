@@ -23,7 +23,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Transactional // We need to do a rollback if we can not save the image in s3
-    public void saveProductWithImage(Product product, MultipartFile imageFile) {
+    public Product saveProductWithImage(Product product, MultipartFile imageFile) {
 
         if (imageFile != null) {
             String fileName = String.format("product-%s-%s.jpg", product.getCode(), LocalDate.now().toString());
@@ -38,7 +38,7 @@ public class ProductService {
 
         }
 
-        productRepository.save(product);
+        return productRepository.save(product);
     }
 
     public List<Product> getAll() {
