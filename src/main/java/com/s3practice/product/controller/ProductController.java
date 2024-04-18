@@ -33,8 +33,8 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> saveProduct(
-        @RequestParam(required = false) String code,
-        @RequestParam(required = false) String name,
+        @RequestParam String name,
+        @RequestParam String code,
         @RequestParam(required = false) String description,
         @RequestParam(required = false) Float price,
         @RequestParam(required = false) Integer stockMin,
