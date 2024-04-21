@@ -7,26 +7,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Entity
-@Table(name = "product")
-public class Product {
+@Table(name = "role_entity")
+public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String code;
-    private String name;
-    private String description;
-    private Float price;
-    private Integer stockMin;
-    private Integer currentStock;
-    private String image;
+    private String role;
+
+    @Override
+    public String toString() {
+        return "RoleEntity [id=" + id + ", role=" + role + "]";
+    }
 
 }
