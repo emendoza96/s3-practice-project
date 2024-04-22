@@ -1,5 +1,7 @@
 package com.s3practice.product.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.s3practice.product.security.filters.JwtAuthenticationFilter;
 import com.s3practice.product.security.filters.JwtAuthorizationFilter;
@@ -44,6 +47,13 @@ public class SecurityConfig {
 
         return httpSecurity
             .csrf(config -> config.disable())
+            .cors(cors -> cors.configurationSource(request -> {
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(Arrays.asList("*"));
+                configuration.setAllowedMethods(Arrays.asList("*"));
+                configuration.setAllowedHeaders(Arrays.asList("*"));
+                return configuration;
+            }))
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers(HttpMethod.GET, "/api/product").permitAll();
                 auth.anyRequest().authenticated();
