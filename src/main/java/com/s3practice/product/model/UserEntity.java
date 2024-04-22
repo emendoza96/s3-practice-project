@@ -1,6 +1,7 @@
 package com.s3practice.product.model;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,7 +15,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +23,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 @Entity
 @Table(name = "user_entity")
 public class UserEntity {
@@ -42,7 +41,7 @@ public class UserEntity {
 		joinColumns = { @JoinColumn(name = "userId") },
 		inverseJoinColumns = { @JoinColumn (name = "roleId") }
     )
-    private HashSet<RoleEntity> roles;
+    private Set<RoleEntity> roles = new HashSet<>();
 
     @Override
     public String toString() {

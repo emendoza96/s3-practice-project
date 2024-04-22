@@ -3,6 +3,7 @@ package com.s3practice.product.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -44,12 +45,12 @@ public class SecurityConfig {
         return httpSecurity
             .csrf(config -> config.disable())
             .authorizeHttpRequests(auth -> {
+                auth.requestMatchers(HttpMethod.GET, "/api/product").permitAll();
                 auth.anyRequest().authenticated();
             })
             .sessionManagement(session -> {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             })
-            //.httpBasic(Customizer.withDefaults())
             .addFilter(jwtAuthenticationFilter)
             .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
