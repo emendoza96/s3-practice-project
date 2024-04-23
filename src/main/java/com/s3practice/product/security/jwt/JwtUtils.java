@@ -4,8 +4,11 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import com.s3practice.product.service.TokenBlacklistService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,6 +24,9 @@ public class JwtUtils {
 
     @Value("${jwt.time.expiration}")
     private String timeExpiration;
+
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
 
     public String generateAccessToken(String username) {
         return Jwts.builder()
@@ -38,7 +44,9 @@ public class JwtUtils {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-            return true;
+
+                // The token must not be black listed
+            return !tokenBlacklistService.isBlacklisted(token);
         } catch (Exception e) {
             return false;
         }
