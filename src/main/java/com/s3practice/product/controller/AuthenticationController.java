@@ -30,7 +30,7 @@ public class AuthenticationController {
 
             SecurityContextHolder.clearContext();
 
-            return ResponseEntity.ok().body("Logged out successfully");
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
         }
