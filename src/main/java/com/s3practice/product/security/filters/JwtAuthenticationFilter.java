@@ -2,7 +2,9 @@ package com.s3practice.product.security.filters;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -58,12 +60,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         User user = (User) authResult.getPrincipal();
         String token = jwtUtils.generateAccessToken(user.getUsername());
 
+        List<String> roles = user.getAuthorities().stream().map(auth -> {
+            return auth.getAuthority();
+        }).collect(Collectors.toList());
+
         response.addHeader("Authorization", token);
 
         Map<String, Object> httpResponse = new HashMap<>();
         httpResponse.put("token", token);
-        httpResponse.put("Message", "Successful Authentication");
-        httpResponse.put("Username", user.getUsername());
+        httpResponse.put("message", "Successful Authentication");
+        httpResponse.put("username", user.getUsername());
+        httpResponse.put("roles", roles);
+
 
         response.getWriter().write(new ObjectMapper().writeValueAsString(httpResponse));
         response.setStatus(HttpStatus.OK.value());
